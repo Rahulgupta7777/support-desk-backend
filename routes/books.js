@@ -3,11 +3,13 @@ const router = express.Router()
 const Book = require("../models/books")
 const fs = require('fs/promises')
 
+filepath= path.json(__dirname,"data.txt")
+const path = require('path')
 router.use(express.json())
 
 router.get('/books', async (req, res) => {
     try {
-    await fs.writeFile("data.json", JSON.stringify({
+    await fs.writeFile(filepath, JSON.stringify({
     statusCode: res.statusCode,
     url: req.url,
     method: req.method,
@@ -25,9 +27,9 @@ router.get('/books', async (req, res) => {
 router.get('/books/:id', async (req, res) => {
     try {
         const item = await Book.findById(req.params.id);
-        const data = await fs.readFile('data.json', 'utf8');
+        const data = await fs.readFile(filepath, 'utf8');
         const dataBooks = JSON.parse(data);
-         await fs.writeFile("data.json", JSON.stringify({
+         await fs.writeFile(filepath, JSON.stringify({
             statusCode: res.statusCode,
             id:req.params.id,
             url: req.url,
@@ -50,7 +52,7 @@ router.post('/books/:id', async (req, res) => {
             name,
             author
           });
-           await fs.writeFile("data.json", JSON.stringify({
+           await fs.writeFile(filepath, JSON.stringify({
             statusCode: res.statusCode,
               id:req.params.id,
             url: req.url,
@@ -72,7 +74,7 @@ router.delete('/books/:id', async (req, res) => {
     try {
          await Book.findByIdAndDelete(req.params.id);
         res.json('book deleted.');
-         await fs.writeFile("data.json", JSON.stringify({
+         await fs.writeFile(filepath, JSON.stringify({
             statusCode: res.statusCode,
               id:req.params.id,
             url: req.url,
@@ -93,7 +95,7 @@ router.delete('/books/:id', async (req, res) => {
             author: req.body.author
             
         });
-         await fs.writeFile("data.json", JSON.stringify({
+         await fs.writeFile(filepath, JSON.stringify({
             statusCode: res.statusCode,
               id:req.params.id,
             url: req.url,

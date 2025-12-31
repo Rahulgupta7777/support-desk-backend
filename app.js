@@ -8,11 +8,12 @@ const fs = require('fs')
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
+const path = require('path')
+filepath= path.json(__dirname,"data.txt")
 
 app.use("/",async(req,res)=>{
     console.log(req.statusCode)
-    await fs.writeFile("data.json", JSON.stringify({
+    await fs.writeFile(filepath, JSON.stringify({
                 statusCode: res.statusCode,
                 url: req.url,
                 method: req.method,
